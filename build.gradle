@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = 'com.amadornes.artifactural'
+version = '1.0.0'
+
+sourceSets {
+    api
+	main
+	gradlecomp
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    implementation sourceSets.api.output
+	
+    gradlecompImplementation sourceSets.api.output
+    gradlecompImplementation sourceSets.main.output
+    gradlecompImplementation gradleApi()
+}
+
+jar {
+    from sourceSets.api.output
+    from sourceSets.main.output
+    from sourceSets.gradlecomp.output
+}
