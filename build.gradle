@@ -6,7 +6,7 @@ version = '1.0.0'
 
 sourceSets {
     api
-	main
+	shared
 	gradlecomp
 }
 
@@ -16,15 +16,14 @@ repositories {
 }
 
 dependencies {
-    implementation sourceSets.api.output
+    sharedImplementation sourceSets.api.output
 	
     gradlecompImplementation sourceSets.api.output
-    gradlecompImplementation sourceSets.main.output
+    gradlecompImplementation sourceSets.shared.output
     gradlecompImplementation gradleApi()
+	
+	compile sourceSets.api.output
+	compile sourceSets.shared.output
+	compile sourceSets.gradlecomp.output
 }
 
-jar {
-    from sourceSets.api.output
-    from sourceSets.main.output
-    from sourceSets.gradlecomp.output
-}
