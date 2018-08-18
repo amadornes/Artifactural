@@ -2,16 +2,16 @@ package com.amadornes.artifactural.base.artifact;
 
 import com.amadornes.artifactural.api.artifact.ArtifactMetadata;
 
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SimpleArtifactMetadata implements ArtifactMetadata {
 
-    private final LinkedList<Entry> entries = new LinkedList<>();
+    private final List<Entry> entries = new LinkedList<>();
+    private String hash = null;
 
     public SimpleArtifactMetadata() {
     }
@@ -28,11 +28,16 @@ public class SimpleArtifactMetadata implements ArtifactMetadata {
 
     @Override
     public String getHash() {
+        if (hash != null) return hash;
         try {
-            String str = entries.stream().map(Entry::toString).collect(Collectors.joining(";;"));
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(str.getBytes(StandardCharsets.UTF_8));
-            return Base64.getEncoder().encodeToString(hash);
+            String str = entries.stream().map(Entry::toString).collect(Collectors.joining("\n"));
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            byte[] hashBytes = digest.digest(str.getBytes());
+            StringBuilder hashBuilder = new StringBuilder();
+            for (byte b : hashBytes) {
+                hashBuilder.append(String.format("%02x", b));
+            }
+            return hash = hashBuilder.toString();
         } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
