@@ -2,11 +2,11 @@ package com.amadornes.artifactural.base.artifact;
 
 import com.amadornes.artifactural.api.artifact.ArtifactIdentifier;
 
-public class ArtifactIdentifierImpl implements ArtifactIdentifier {
+public class SimpleArtifactIdentifier implements ArtifactIdentifier {
 
     private final String group, name, version, classifier, extension;
 
-    public ArtifactIdentifierImpl(String group, String name, String version, String classifier, String extension) {
+    public SimpleArtifactIdentifier(String group, String name, String version, String classifier, String extension) {
         this.group = group;
         this.name = name;
         this.version = version;

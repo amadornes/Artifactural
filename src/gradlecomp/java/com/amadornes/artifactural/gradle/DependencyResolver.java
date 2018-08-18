@@ -1,9 +1,14 @@
 package com.amadornes.artifactural.gradle;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.*;
-import org.gradle.internal.impldep.com.google.common.cache.Cache;
-import org.gradle.internal.impldep.com.google.common.cache.CacheBuilder;
+import org.gradle.api.artifacts.ClientModule;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.DependencyArtifact;
+import org.gradle.api.artifacts.FileCollectionDependency;
+import org.gradle.api.artifacts.ModuleDependency;
 
 import java.io.File;
 import java.util.Set;
@@ -72,12 +77,29 @@ public class DependencyResolver {
      * Resolves a dependency, downloading the file and its transitives
      * if not cached and returns the set of files.
      */
+    public Set<File> resolveDependency(Object dependency) {
+        Dependency dep = project.getDependencies().create(dependency);
+        return resolveDependency(dep);
+    }
+
+    /**
+     * Resolves a dependency, downloading the file and its transitives
+     * if not cached and returns the set of files.
+     */
     public Set<File> resolveDependency(Object dependency, boolean transitive) {
         Dependency dep = project.getDependencies().create(dependency);
         if (dep instanceof ClientModule) {
             dep = ((ClientModule) dep).copy().setTransitive(transitive);
         }
         return resolveDependency(dep);
+    }
+
+    /**
+     * Resolves a single dependency without any of its transitives
+     * if not cached and returns the file.
+     */
+    public File resolveSingleDependency(Object dependency) {
+        return resolveDependency(dependency, false).iterator().next();
     }
 
 }

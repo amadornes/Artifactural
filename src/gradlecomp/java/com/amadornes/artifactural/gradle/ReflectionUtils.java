@@ -12,12 +12,12 @@ public class ReflectionUtils {
             Field f = null;
             for (String n : name.split("\\.")) {
                 f = findField(target.getClass(), n);
-                if(f == null) throw new IllegalStateException("Could not find '" + name + "'");
+                if (f == null) throw new IllegalStateException("Could not find '" + name + "'");
                 f.setAccessible(true);
                 prev = target;
                 target = f.get(target);
             }
-            if(f == null) throw new IllegalStateException("Could not find '" + name + "'");
+            if (f == null) throw new IllegalStateException("Could not find '" + name + "'");
             f.set(prev, operator.apply((T) target));
         } catch (IllegalAccessException ex) {
             throw new RuntimeException(ex);

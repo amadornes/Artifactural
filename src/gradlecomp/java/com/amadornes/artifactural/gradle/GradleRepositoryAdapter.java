@@ -3,7 +3,9 @@ package com.amadornes.artifactural.gradle;
 import com.amadornes.artifactural.api.artifact.Artifact;
 import com.amadornes.artifactural.api.artifact.ArtifactIdentifier;
 import com.amadornes.artifactural.api.repository.Repository;
-import com.amadornes.artifactural.base.artifact.ArtifactIdentifierImpl;
+import com.amadornes.artifactural.base.artifact.SimpleArtifactIdentifier;
+import com.google.common.io.CountingInputStream;
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.Action;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Transformer;
@@ -18,14 +20,23 @@ import org.gradle.api.internal.artifacts.repositories.resolver.ExternalResourceA
 import org.gradle.api.internal.artifacts.repositories.resolver.ExternalResourceResolver;
 import org.gradle.api.internal.artifacts.repositories.resolver.MavenResolver;
 import org.gradle.api.resources.ResourceException;
-import org.gradle.internal.impldep.com.google.common.io.CountingInputStream;
-import org.gradle.internal.impldep.org.apache.commons.io.IOUtils;
-import org.gradle.internal.resource.*;
+import org.gradle.internal.resource.AbstractExternalResource;
+import org.gradle.internal.resource.ExternalResource;
+import org.gradle.internal.resource.ExternalResourceName;
+import org.gradle.internal.resource.ExternalResourceReadResult;
+import org.gradle.internal.resource.ExternalResourceRepository;
+import org.gradle.internal.resource.ExternalResourceWriteResult;
+import org.gradle.internal.resource.ReadableContent;
+import org.gradle.internal.resource.ResourceExceptions;
 import org.gradle.internal.resource.metadata.DefaultExternalResourceMetaData;
 import org.gradle.internal.resource.metadata.ExternalResourceMetaData;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -104,7 +115,7 @@ public class GradleRepositoryAdapter extends AbstractArtifactRepository implemen
             URI uri = name.getUri();
             Matcher matcher = URL_PATTERN.matcher(uri.getPath());
             if (!matcher.matches()) return new NullExternalResource(uri);
-            ArtifactIdentifier identifier = new ArtifactIdentifierImpl(
+            ArtifactIdentifier identifier = new SimpleArtifactIdentifier(
                     matcher.group("group").replace('/', '.'),
                     matcher.group("name"),
                     matcher.group("version"),

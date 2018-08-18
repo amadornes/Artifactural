@@ -1,13 +1,12 @@
 apply plugin: 'java'
-apply plugin: 'idea'
 
 group = 'com.amadornes.artifactural'
 version = '1.0.0'
 
 sourceSets {
     api
-	shared
-	gradlecomp
+    shared
+    gradlecomp
 }
 
 repositories {
@@ -15,15 +14,29 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    sharedImplementation sourceSets.api.output
-	
-    gradlecompImplementation sourceSets.api.output
-    gradlecompImplementation sourceSets.shared.output
-    gradlecompImplementation gradleApi()
-	
-	compile sourceSets.api.output
-	compile sourceSets.shared.output
-	compile sourceSets.gradlecomp.output
+configurations {
+    sharedImplementation.extendsFrom apiImplementation
+    gradlecompImplementation.extendsFrom sharedImplementation
+
+    compile.extendsFrom sharedImplementation
+    compile.extendsFrom gradlecompImplementation
 }
 
+dependencies {
+    sharedImplementation sourceSets.api.output
+
+    gradlecompImplementation sourceSets.shared.output
+    gradlecompImplementation gradleApi()
+    gradlecompImplementation 'com.google.guava:guava:26.0-jre'
+    gradlecompImplementation 'commons-io:commons-io:2.4'
+
+    compile sourceSets.api.output
+    compile sourceSets.shared.output
+    compile sourceSets.gradlecomp.output
+}
+
+jar {
+    from sourceSets.api.output
+    from sourceSets.shared.output
+    from sourceSets.gradlecomp.output
+}
