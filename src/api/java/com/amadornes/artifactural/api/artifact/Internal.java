@@ -46,7 +46,17 @@ final class Internal {
 
         @Override
         public ArtifactMetadata getMetadata() {
-            return ArtifactMetadata.empty();
+            return new ArtifactMetadata() {
+                @Override
+                public ArtifactMetadata with(String key, String value) {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public String getHash() {
+                    return "ERROR";
+                }
+            };
         }
 
         @Override
