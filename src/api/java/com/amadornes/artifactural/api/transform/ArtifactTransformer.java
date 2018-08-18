@@ -3,7 +3,6 @@ package com.amadornes.artifactural.api.transform;
 import com.amadornes.artifactural.api.artifact.Artifact;
 import com.amadornes.artifactural.api.artifact.ArtifactMetadata;
 
-import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public interface ArtifactTransformer {
@@ -20,10 +19,6 @@ public interface ArtifactTransformer {
                 return metadata;
             }
         };
-    }
-
-    static ArtifactTransformer exclude(Set<String> filters) {
-        return (ArtifactTransformer) new Object();
     }
 
     default boolean appliesTo(Artifact artifact) {
