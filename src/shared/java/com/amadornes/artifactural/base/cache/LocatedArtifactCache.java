@@ -14,7 +14,7 @@ public class LocatedArtifactCache extends ArtifactCacheBase {
     }
 
     @Override
-    public Artifact store(Artifact artifact, String specifier) {
+    public Artifact.Cached store(Artifact artifact, String specifier) {
         ArtifactIdentifier identifier = artifact.getIdentifier();
         File cachePath = new File(path.getAbsolutePath()
                 .replace("${GROUP}", identifier.getGroup())

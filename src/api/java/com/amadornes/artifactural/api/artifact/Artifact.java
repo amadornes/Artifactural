@@ -4,11 +4,8 @@ import com.amadornes.artifactural.api.cache.ArtifactCache;
 import com.amadornes.artifactural.api.transform.ArtifactTransformer;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.function.UnaryOperator;
 
 public interface Artifact {
 
@@ -26,10 +23,22 @@ public interface Artifact {
 
     Artifact apply(ArtifactTransformer transformer);
 
-    Artifact cache(ArtifactCache cache, String specifier);
+    Artifact.Cached cache(ArtifactCache cache, String specifier);
+
+    default Artifact.Cached optionallyCache(ArtifactCache cache, String specifier) {
+        return this instanceof Artifact.Cached ? (Artifact.Cached) this : cache(cache, specifier);
+    }
 
     boolean isPresent();
 
     InputStream openStream() throws IOException, MissingArtifactException;
+
+    interface Cached extends Artifact {
+
+        File asFile() throws IOException, MissingArtifactException;
+
+        File getFileLocation() throws IOException, MissingArtifactException;
+
+    }
 
 }

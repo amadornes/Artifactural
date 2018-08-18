@@ -13,7 +13,7 @@ public abstract class ArtifactBase implements Artifact {
     private final ArtifactType type;
     private final ArtifactMetadata metadata;
 
-    ArtifactBase(ArtifactIdentifier identifier, ArtifactType type, ArtifactMetadata metadata) {
+    public ArtifactBase(ArtifactIdentifier identifier, ArtifactType type, ArtifactMetadata metadata) {
         this.identifier = identifier;
         this.type = type;
         this.metadata = metadata;
@@ -41,7 +41,7 @@ public abstract class ArtifactBase implements Artifact {
     }
 
     @Override
-    public Artifact cache(ArtifactCache cache, String specifier) {
+    public Artifact.Cached cache(ArtifactCache cache, String specifier) {
         return cache.store(this, specifier);
     }
 

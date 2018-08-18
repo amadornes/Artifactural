@@ -3,10 +3,10 @@ package com.amadornes.artifactural.api.artifact;
 import com.amadornes.artifactural.api.cache.ArtifactCache;
 import com.amadornes.artifactural.api.transform.ArtifactTransformer;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
 
-class Internal {
+final class Internal {
 
     static final ArtifactIdentifier NO_IDENTIFIER = new ArtifactIdentifier() {
 
@@ -37,7 +37,7 @@ class Internal {
 
     };
 
-    static final Artifact NO_ARTIFACT = new Artifact() {
+    static final Artifact NO_ARTIFACT = new Artifact.Cached() {
 
         @Override
         public ArtifactIdentifier getIdentifier() {
@@ -65,7 +65,7 @@ class Internal {
         }
 
         @Override
-        public Artifact cache(ArtifactCache cache, String specifier) {
+        public Artifact.Cached cache(ArtifactCache cache, String specifier) {
             return this;
         }
 
@@ -76,6 +76,16 @@ class Internal {
 
         @Override
         public InputStream openStream() throws MissingArtifactException {
+            throw new MissingArtifactException(getIdentifier());
+        }
+
+        @Override
+        public File asFile() throws MissingArtifactException {
+            throw new MissingArtifactException(getIdentifier());
+        }
+
+        @Override
+        public File getFileLocation() throws MissingArtifactException {
             throw new MissingArtifactException(getIdentifier());
         }
 
