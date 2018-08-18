@@ -28,4 +28,8 @@ public class LocatedArtifactCache extends ArtifactCacheBase {
         return doStore(cachePath, artifact);
     }
 
+    public static File expand(File path) {
+        return new File(path, "${GROUP}/${NAME}/${META_HASH}/${NAME}-${VERSION}-${CLASSIFIER}-${SPECIFIER}.${EXTENSION}");
+    }
+
 }
