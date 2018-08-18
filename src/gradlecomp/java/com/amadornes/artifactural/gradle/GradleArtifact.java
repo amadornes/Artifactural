@@ -20,7 +20,7 @@ public class GradleArtifact {
                 false
         );
         if (files.isEmpty()) return Artifact.none();
-        return StreamableArtifact.ofJar(identifier, type, files.iterator().next());
+        return StreamableArtifact.ofFile(identifier, type, files.iterator().next());
     }
 
 }
