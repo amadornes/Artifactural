@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 group = 'com.amadornes.artifactural'
 version = '1.0.0'
@@ -39,4 +40,52 @@ jar {
     from sourceSets.api.output
     from sourceSets.shared.output
     from sourceSets.gradlecomp.output
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                groupId = project.group
+                version = project.version
+                artifactId = project.archivesBaseName
+                name = project.archivesBaseName
+                packaging = 'jar'
+                description = 'A Gradle artifact processing and management tool'
+                url = 'https://github.com/amadornes/Artifactural/'
+
+                scm {
+                    url = 'https://github.com/amadornes/Artifactural/'
+                    connection = 'scm:git:git://github.com/amadornes/Artifactural.git'
+                    developerConnection = 'scm:git:git@github.com:amadornes/Artifactural.git'
+                }
+                issueManagement {
+                    system = 'github'
+                    url = 'https://github.com/amadornes/Artifactural/issues'
+                }
+
+                licenses {
+                    license {
+                        name = 'LGPL-2.1'
+                        url = 'https://www.gnu.org/licenses/lgpl-2.1.txt'
+                        distribution = 'repo'
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            if (project.hasProperty('mavenPassword')) {
+                credentials {
+                    username = project.properties.mavenUser
+                    password = project.properties.mavenPassword
+                }
+                url 'http://files.minecraftforge.net/maven/manage/upload'
+            } else {
+                url 'file://' + rootProject.file('repo').getAbsolutePath()
+            }
+        }
+    }
 }
