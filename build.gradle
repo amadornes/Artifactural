@@ -64,7 +64,6 @@ publishing {
                     system = 'github'
                     url = 'https://github.com/amadornes/Artifactural/issues'
                 }
-
                 licenses {
                     license {
                         name = 'LGPL-2.1'
